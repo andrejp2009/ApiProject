@@ -23,9 +23,6 @@ obj/
 # Rider
 .idea/
 
-# Entity Framework Migrations
-Migrations/
-
 # Configuration files
 appsettings.json
 appsettings.Development.json
