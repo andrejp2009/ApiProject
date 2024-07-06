@@ -23,7 +23,12 @@ namespace ApiProject.Controllers.Orders
         [SwaggerOperation(Summary = "Create a new order", Description = "Creates a new order with the provided details.", Tags = new[] { "ORDERS"})]
         public async Task<ActionResult<ResponseOrderPost>> PostOrder(CreateOrderPost orderDto)
         {
-            // Проверяем существование пользователя с указанным UserId
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var user = await _context.Users.FindAsync(orderDto.UserId);
             if (user == null)
             {

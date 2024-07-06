@@ -31,10 +31,17 @@ namespace ApiProject.Controllers.Users
             {
                 return NotFound();
             }
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             // Update fields that can be changed
             user.Email = userDto.Email;
             user.DateOfBirth = userDto.DateOfBirth;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Address = userDto.Address;
             user.IsActive = userDto.IsActive;
 
             _context.Entry(user).State = EntityState.Modified;

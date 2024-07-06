@@ -10,18 +10,20 @@ namespace ApiProject.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(100)]
+        [Required(ErrorMessage = "Product Name is required")]
+        [StringLength(100, ErrorMessage = "Product Name cannot be longer than 100 characters")]
         public string ProductName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Price is required")]
+        [Range(0.01, 1000000.00, ErrorMessage = "Price must be between 0.01 and 1,000,000.00")]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        [Required]
-        public DateTime OrderDate { get; set; } = DateTime.Now; 
+        [Required(ErrorMessage = "Order Date is required")]
+        [DataType(DataType.Date)]
+        public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        [Required]
+        [Required(ErrorMessage = "User ID is required")]
         public int UserId { get; set; }
 
         [JsonIgnore]

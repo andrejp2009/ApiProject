@@ -23,6 +23,12 @@ namespace ApiProject.Controllers.Users
         [SwaggerOperation(Summary = "Create a new user", Description = "Creates a new user with the provided details.", Tags = new[] { "USERS"})]
         public async Task<ActionResult<ResponseUserPost>> PostUser(CreateUserPost userDto)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var user = new User
             {
                 FirstName = userDto.FirstName,

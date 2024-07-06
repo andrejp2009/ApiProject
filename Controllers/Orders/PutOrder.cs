@@ -23,6 +23,12 @@ namespace ApiProject.Controllers.Orders
         [SwaggerOperation(Summary = "Update an existing order", Description = "Updates an existing order with the provided details.", Tags = new[] { "USERS" })]
         public async Task<ActionResult<ResponseOrderPut>> PutOrder(int id, UpdateOrderPut orderDto)
         {
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != orderDto.UserId)
             {
                 return BadRequest("Order ID does not match User ID.");
