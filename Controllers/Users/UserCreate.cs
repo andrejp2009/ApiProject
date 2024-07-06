@@ -10,11 +10,11 @@ namespace ApiProject.Controllers.Users
 {
     [ApiController]
     [Route("api/users")]
-    public class PostUserController : ControllerBase
+    public class UserCreateController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PostUserController(ApplicationDbContext context)
+        public UserCreateController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -22,9 +22,8 @@ namespace ApiProject.Controllers.Users
         // POST: api/users
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new user", Description = "Creates a new user with the provided details.", Tags = new[] { ApiTags.Users })]
-        public async Task<ActionResult<ResponseUserPost>> PostUser(CreateUserPost userDto)
+        public async Task<ActionResult<UserCreateResponse>> PostUser(UserCreateRequest userDto)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -33,7 +32,7 @@ namespace ApiProject.Controllers.Users
             var user = new User
             {
                 FirstName = userDto.FirstName,
-                LastName = userDto.LastName,                
+                LastName = userDto.LastName,
                 Email = userDto.Email,
                 DateOfBirth = userDto.DateOfBirth,
                 PhoneNumber = userDto.PhoneNumber,
@@ -43,24 +42,23 @@ namespace ApiProject.Controllers.Users
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            var userResponseDto = new ResponseUserPost
+            var userResponseDto = new UserCreateResponse
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
-                LastName = user.LastName,                
+                LastName = user.LastName,
                 Email = user.Email,
                 DateOfBirth = user.DateOfBirth,
                 PhoneNumber = user.PhoneNumber,
                 Address = user.Address
             };
 
-            return CreatedAtAction(nameof(GetUserController.GetUser), "GetUser", new { id = userResponseDto.Id }, userResponseDto);
-
-        }
+            return Ok(userResponseDto);
+        } 
     }
     
     // DTO classes
-    public class CreateUserPost
+    public class UserCreateRequest
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -70,7 +68,7 @@ namespace ApiProject.Controllers.Users
         public string Address { get; set; }
     }
 
-    public class ResponseUserPost
+    public class UserCreateResponse
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

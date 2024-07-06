@@ -11,20 +11,20 @@ namespace ApiProject.Controllers.Orders
 {
     [ApiController]
     [Route("api/orders")]
-    public class PostOrderController : ControllerBase
+    public class OrderCreateController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PostOrderController(ApplicationDbContext context)
+        public OrderCreateController(ApplicationDbContext context)
         {
             _context = context;
         }
+        
         // POST: api/orders
         [HttpPost]
         [SwaggerOperation(Summary = "Create a new order", Description = "Creates a new order with the provided details.", Tags = new[] { ApiTags.Orders })]
-        public async Task<ActionResult<ResponseOrderPost>> PostOrder(CreateOrderPost orderDto)
+        public async Task<ActionResult<OrderCreateResponse>> PostOrder(OrderCreateRequest orderDto)
         {
-            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -47,7 +47,7 @@ namespace ApiProject.Controllers.Orders
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            var orderResponseDto = new ResponseOrderPost
+            var orderResponseDto = new OrderCreateResponse
             {
                 Id = order.Id,
                 ProductName = order.ProductName,
@@ -56,12 +56,12 @@ namespace ApiProject.Controllers.Orders
                 UserId = order.UserId
             };
 
-            return CreatedAtAction(nameof(GetUserController.GetUser), new { id = orderResponseDto.Id }, orderResponseDto);
-        }        
+            return Ok(orderResponseDto);
+        }      
     }
     
     // DTO classes
-    public class CreateOrderPost
+    public class OrderCreateRequest
     {             
         public string ProductName { get; set; }      
         
@@ -71,7 +71,7 @@ namespace ApiProject.Controllers.Orders
 
     }
 
-    public class ResponseOrderPost
+    public class OrderCreateResponse
     {
         public int Id { get; set; }                
         public string ProductName { get; set; }      

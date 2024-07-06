@@ -12,11 +12,11 @@ namespace ApiProject.Controllers.Orders
 {
     [ApiController]
     [Route("api/orders")]
-    public class GetOrderController : ControllerBase
+    public class OrderGetController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public GetOrderController(ApplicationDbContext context)
+        public OrderGetController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,10 +24,10 @@ namespace ApiProject.Controllers.Orders
         // GET: api/orders
         [HttpGet]
         [SwaggerOperation(Summary = "Get all orders", Description = "Returns a list of all orders.", Tags = new[] { ApiTags.Orders })]
-        public async Task<ActionResult<IEnumerable<GetOrder>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetOrders()
         {
             var orders = await _context.Orders
-                .Select(order => new GetOrder
+                .Select(order => new OrderGetResponse
                 {
                     Id = order.Id,
                     ProductName = order.ProductName,
@@ -43,11 +43,11 @@ namespace ApiProject.Controllers.Orders
         // GET: api/orders/{id}
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "Get an order by ID", Description = "Returns an order by the given ID.", Tags = new[] { ApiTags.Users })]
-        public async Task<ActionResult<GetOrder>> GetOrder(int id)
+        public async Task<ActionResult<OrderGetResponse>> GetOrder(int id)
         {
             var order = await _context.Orders
                 .Where(o => o.Id == id)
-                .Select(order => new GetOrder
+                .Select(order => new OrderGetResponse
                 {
                     Id = order.Id,
                     ProductName = order.ProductName,
@@ -68,11 +68,11 @@ namespace ApiProject.Controllers.Orders
         // GET: api/orders/user/{userId}
         [HttpGet("user/{userId}")]
         [SwaggerOperation(Summary = "Get orders by User ID", Description = "Returns a list of orders for the given User ID.", Tags = new[] { ApiTags.Users })]
-        public async Task<ActionResult<IEnumerable<GetOrder>>> GetOrdersByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetOrdersByUserId(int userId)
         {
             var orders = await _context.Orders
                 .Where(o => o.UserId == userId)
-                .Select(order => new GetOrder
+                .Select(order => new OrderGetResponse
                 {
                     Id = order.Id,
                     ProductName = order.ProductName,
@@ -92,7 +92,7 @@ namespace ApiProject.Controllers.Orders
     }
     
     //Dto classes
-    public class GetOrder
+    public class OrderGetResponse
     {
         public int Id { get; set; }                
         public string ProductName { get; set; }

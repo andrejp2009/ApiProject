@@ -12,11 +12,11 @@ namespace ApiProject.Controllers.Users
 {
     [ApiController]
     [Route("api/users")]
-    public class GetUserController : ControllerBase
+    public class UserGetController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public GetUserController(ApplicationDbContext context)
+        public UserGetController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,7 +24,7 @@ namespace ApiProject.Controllers.Users
         // GET: api/users/{id}
         [HttpGet("{id}", Name = "GetUser")]
         [SwaggerOperation(Summary = "Get a user by ID", Description = "Retrieves a user by their ID.", Tags = new[] { ApiTags.Users })]
-        public async Task<ActionResult<GetUser>> GetUser(int id)
+        public async Task<ActionResult<UserGetResponse>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -33,7 +33,7 @@ namespace ApiProject.Controllers.Users
                 return NotFound();
             }
 
-            var userDto = new GetUser
+            var userDto = new UserGetResponse
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -50,7 +50,7 @@ namespace ApiProject.Controllers.Users
         // GET: api/users/search
         [HttpGet("search")]
         [SwaggerOperation(Summary = "Search users by name or active status", Description = "Searches for users by their First name or whether they are active.", Tags = new[] { ApiTags.Users })]
-        public async Task<ActionResult<IEnumerable<GetUser>>> SearchUsers([FromQuery] string name, [FromQuery] bool? isActive)
+        public async Task<ActionResult<IEnumerable<UserGetResponse>>> SearchUsers([FromQuery] string name, [FromQuery] bool? isActive)
         {
             var query = _context.Users.AsQueryable();
 
@@ -66,7 +66,7 @@ namespace ApiProject.Controllers.Users
 
             var users = await query.ToListAsync();
 
-            var userDtos = users.Select(user => new GetUser
+            var userDtos = users.Select(user => new UserGetResponse
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -83,7 +83,7 @@ namespace ApiProject.Controllers.Users
     }
     
     // DTO classes
-    public class GetUser
+    public class UserGetResponse
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

@@ -12,19 +12,19 @@ namespace ApiProject.Controllers.Users
 {
     [ApiController]
     [Route("api/users")]
-    public class PutUserController : ControllerBase
+    public class UserChangeCOntroller : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PutUserController(ApplicationDbContext context)
+        public UserChangeCOntroller(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // PUT: api/users/{id}
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Update an existing user", Description = "Updates an existing user with the provided details.", Tags = new[] { ApiTags.Users } )]
-        public async Task<ActionResult<ResponseUserPut>> PutUser(int id, UpdateUserPut userDto)
+        [SwaggerOperation(Summary = "Update an existing user", Description = "Updates an existing user with the provided details.", Tags = new[] { ApiTags.Users })]
+        public async Task<ActionResult<UserChangeResponse>> PutUser(int id, UserChangeRequest userDto)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -32,7 +32,7 @@ namespace ApiProject.Controllers.Users
             {
                 return NotFound();
             }
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -50,6 +50,20 @@ namespace ApiProject.Controllers.Users
             try
             {
                 await _context.SaveChangesAsync();
+
+                var userResponseDto = new UserChangeResponse
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    DateOfBirth = user.DateOfBirth,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    IsActive = user.IsActive
+                };
+
+                return Ok(userResponseDto);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -62,24 +76,11 @@ namespace ApiProject.Controllers.Users
                     throw;
                 }
             }
-
-            var userResponseDto = new ResponseUserPut
-            {
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,                
-                Email = userDto.Email,
-                DateOfBirth = userDto.DateOfBirth,
-                PhoneNumber = userDto.PhoneNumber,
-                Address = userDto.Address,
-                IsActive = user.IsActive
-            };
-
-            return userResponseDto;
         }
     }
 
     // DTO classes
-    public class UpdateUserPut
+    public class UserChangeRequest
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -90,7 +91,7 @@ namespace ApiProject.Controllers.Users
         public bool IsActive { get; set; }
     }
 
-    public class ResponseUserPut
+    public class UserChangeResponse
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

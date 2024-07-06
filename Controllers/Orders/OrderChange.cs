@@ -11,31 +11,24 @@ namespace ApiProject.Controllers.Orders
 {
     [ApiController]
     [Route("api/orders")]
-    public class PutOrderController : ControllerBase
+    public class OrderChangeController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public PutOrderController(ApplicationDbContext context)
+        public OrderChangeController(ApplicationDbContext context)
         {
             _context = context;
         }
         // PUT: api/orders/{id}
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "Update an existing order", Description = "Updates an existing order with the provided details.", Tags = new[] { ApiTags.Orders })]
-        public async Task<ActionResult<ResponseOrderPut>> PutOrder(int id, UpdateOrderPut orderDto)
+        public async Task<ActionResult<OrderUpdateResponse>> PutOrder(int id, OrderUpdateRequest orderDto)
         {
-            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != orderDto.UserId)
-            {
-                return BadRequest("Order ID does not match User ID.");
-            }
-
-            // Проверяем существование заказа с указанным ID
             var existingOrder = await _context.Orders.FindAsync(id);
             if (existingOrder == null)
             {
@@ -71,7 +64,16 @@ namespace ApiProject.Controllers.Orders
                 }
             }
 
-            return NoContent();
+            var orderResponseDto = new OrderUpdateResponse
+            {
+                Id = existingOrder.Id,
+                ProductName = existingOrder.ProductName,
+                Price = existingOrder.Price,
+                OrderDate = existingOrder.OrderDate,
+                UserId = existingOrder.UserId
+            };
+
+            return Ok(orderResponseDto);
         }
         private bool OrderExists(int id)
         {
@@ -80,7 +82,7 @@ namespace ApiProject.Controllers.Orders
     }
 
     // DTO classes
-    public class UpdateOrderPut
+    public class OrderUpdateRequest
     {
         public string ProductName { get; set; }      
         
@@ -88,7 +90,7 @@ namespace ApiProject.Controllers.Orders
         public DateTime OrderDate { get; set; }     
         public int UserId { get; set; }            
     }
-    public class ResponseOrderPut
+    public class OrderUpdateResponse
     {
         public int Id { get; set; }                
         public string ProductName { get; set; }      
