@@ -1,0 +1,39 @@
+using Microsoft.AspNetCore.Mvc;
+using ApiProject.Data;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Threading.Tasks;
+
+
+namespace ApiProject.Controllers.Orders
+{
+    [ApiController]
+    [Route("api/orders")]
+    public class DeleteOrderController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+
+        public DeleteOrderController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+        // DELETE: api/orders/{id}
+        [HttpDelete("{id}")]
+        [SwaggerOperation(Summary = "Delete an order by ID", Description = "Deletes an order by the given ID.", Tags = new[] { "ORDERS" })]
+        [SwaggerResponse(204, "No Content - User successfully deleted.")]
+        [SwaggerResponse(404, "Not Found - User not found.")]
+        [SwaggerResponse(500, "Internal Server Error - An error occurred while deleting the user.")]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }   
+}

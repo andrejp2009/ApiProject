@@ -1,0 +1,33 @@
+# .NET
+*.dll
+*.exe
+*.so
+*.dylib
+
+# Build directories
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# VS Code files
+.vscode/
+
+# Rider
+.idea/
+
+# Entity Framework Migrations
+Migrations/
+
+# Configuration files
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
