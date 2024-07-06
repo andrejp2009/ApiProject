@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ApiProject.Constants;
 
 namespace ApiProject.Controllers
 {
@@ -22,6 +23,7 @@ namespace ApiProject.Controllers
         }
 
         [HttpGet("{userId}")]
+        [SwaggerOperation(Summary = "Get user with orders", Description = "Retrieves the user along with their associated orders based on the provided user ID.", Tags = new[] { ApiTags.UserData })]
         public async Task<ActionResult<GetUserOrders>> GetUserWithOrders(int userId)
         {
             var user = await _context.Users.FindAsync(userId);

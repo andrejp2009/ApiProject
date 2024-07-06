@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ApiProject.Constants;
 
 namespace ApiProject.Controllers.Orders
 {
@@ -22,7 +23,7 @@ namespace ApiProject.Controllers.Orders
 
         // GET: api/orders
         [HttpGet]
-        [SwaggerOperation(Summary = "Get all orders", Description = "Returns a list of all orders.", Tags = new[] { "ORDERS" })]
+        [SwaggerOperation(Summary = "Get all orders", Description = "Returns a list of all orders.", Tags = new[] { ApiTags.Orders })]
         public async Task<ActionResult<IEnumerable<GetOrder>>> GetOrders()
         {
             var orders = await _context.Orders
@@ -41,7 +42,7 @@ namespace ApiProject.Controllers.Orders
 
         // GET: api/orders/{id}
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "Get an order by ID", Description = "Returns an order by the given ID.", Tags = new[] { "ORDERS"})]
+        [SwaggerOperation(Summary = "Get an order by ID", Description = "Returns an order by the given ID.", Tags = new[] { ApiTags.Users })]
         public async Task<ActionResult<GetOrder>> GetOrder(int id)
         {
             var order = await _context.Orders
@@ -66,7 +67,7 @@ namespace ApiProject.Controllers.Orders
 
         // GET: api/orders/user/{userId}
         [HttpGet("user/{userId}")]
-        [SwaggerOperation(Summary = "Get orders by User ID", Description = "Returns a list of orders for the given User ID.", Tags = new[] { "USERS"})]
+        [SwaggerOperation(Summary = "Get orders by User ID", Description = "Returns a list of orders for the given User ID.", Tags = new[] { ApiTags.Users })]
         public async Task<ActionResult<IEnumerable<GetOrder>>> GetOrdersByUserId(int userId)
         {
             var orders = await _context.Orders

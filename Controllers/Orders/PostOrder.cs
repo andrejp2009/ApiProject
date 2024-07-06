@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 using System;
 using ApiProject.Controllers.Users;
+using ApiProject.Constants;
 
 namespace ApiProject.Controllers.Orders
 {
@@ -20,7 +21,7 @@ namespace ApiProject.Controllers.Orders
         }
         // POST: api/orders
         [HttpPost]
-        [SwaggerOperation(Summary = "Create a new order", Description = "Creates a new order with the provided details.", Tags = new[] { "ORDERS"})]
+        [SwaggerOperation(Summary = "Create a new order", Description = "Creates a new order with the provided details.", Tags = new[] { ApiTags.Orders })]
         public async Task<ActionResult<ResponseOrderPost>> PostOrder(CreateOrderPost orderDto)
         {
             

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ApiProject.Constants;
 
 namespace ApiProject.Controllers.Orders
 {
@@ -20,7 +21,7 @@ namespace ApiProject.Controllers.Orders
         }
         // PUT: api/orders/{id}
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Update an existing order", Description = "Updates an existing order with the provided details.", Tags = new[] { "USERS" })]
+        [SwaggerOperation(Summary = "Update an existing order", Description = "Updates an existing order with the provided details.", Tags = new[] { ApiTags.Orders })]
         public async Task<ActionResult<ResponseOrderPut>> PutOrder(int id, UpdateOrderPut orderDto)
         {
             
@@ -41,7 +42,6 @@ namespace ApiProject.Controllers.Orders
                 return NotFound("Order not found.");
             }
 
-            // Проверяем существование пользователя с указанным UserId
             var user = await _context.Users.FindAsync(orderDto.UserId);
             if (user == null)
             {

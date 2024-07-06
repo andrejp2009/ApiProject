@@ -5,6 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using ApiProject.Constants;
 
 
 namespace ApiProject.Controllers.Users
@@ -22,7 +23,7 @@ namespace ApiProject.Controllers.Users
 
         // PUT: api/users/{id}
         [HttpPut("{id}")]
-        [SwaggerOperation(Summary = "Update an existing user", Description = "Updates an existing user with the provided details.", Tags = new[] { "USERS" })]
+        [SwaggerOperation(Summary = "Update an existing user", Description = "Updates an existing user with the provided details.", Tags = new[] { ApiTags.Users } )]
         public async Task<ActionResult<ResponseUserPut>> PutUser(int id, UpdateUserPut userDto)
         {
             var user = await _context.Users.FindAsync(id);

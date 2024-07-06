@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System;
+using ApiProject.Constants;
 
 namespace ApiProject.Controllers.Users
 {
@@ -22,7 +23,7 @@ namespace ApiProject.Controllers.Users
 
         // GET: api/users/{id}
         [HttpGet("{id}", Name = "GetUser")]
-        [SwaggerOperation(Summary = "Get a user by ID", Description = "Retrieves a user by their ID.", Tags = new[] { "USERS" })]
+        [SwaggerOperation(Summary = "Get a user by ID", Description = "Retrieves a user by their ID.", Tags = new[] { ApiTags.Users })]
         public async Task<ActionResult<GetUser>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -48,7 +49,7 @@ namespace ApiProject.Controllers.Users
 
         // GET: api/users/search
         [HttpGet("search")]
-        [SwaggerOperation(Summary = "Search users by name or active status", Description = "Searches for users by their First name or whether they are active.", Tags = new[] { "USERS" })]
+        [SwaggerOperation(Summary = "Search users by name or active status", Description = "Searches for users by their First name or whether they are active.", Tags = new[] { ApiTags.Users })]
         public async Task<ActionResult<IEnumerable<GetUser>>> SearchUsers([FromQuery] string name, [FromQuery] bool? isActive)
         {
             var query = _context.Users.AsQueryable();

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ApiProject.Data;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
+using ApiProject.Constants;
 
 
 namespace ApiProject.Controllers.Orders
@@ -18,7 +19,7 @@ namespace ApiProject.Controllers.Orders
         }
         // DELETE: api/orders/{id}
         [HttpDelete("{id}")]
-        [SwaggerOperation(Summary = "Delete an order by ID", Description = "Deletes an order by the given ID.", Tags = new[] { "ORDERS" })]
+        [SwaggerOperation(Summary = "Delete an order by ID", Description = "Deletes an order by the given ID.", Tags = new[] { ApiTags.Orders })]
         [SwaggerResponse(204, "No Content - User successfully deleted.")]
         [SwaggerResponse(404, "Not Found - User not found.")]
         [SwaggerResponse(500, "Internal Server Error - An error occurred while deleting the user.")]

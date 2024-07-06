@@ -4,6 +4,7 @@ using ApiProject.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Threading.Tasks;
 using System;
+using ApiProject.Constants;
 
 namespace ApiProject.Controllers.Users
 {
@@ -20,7 +21,7 @@ namespace ApiProject.Controllers.Users
 
         // POST: api/users
         [HttpPost]
-        [SwaggerOperation(Summary = "Create a new user", Description = "Creates a new user with the provided details.", Tags = new[] { "USERS"})]
+        [SwaggerOperation(Summary = "Create a new user", Description = "Creates a new user with the provided details.", Tags = new[] { ApiTags.Users })]
         public async Task<ActionResult<ResponseUserPost>> PostUser(CreateUserPost userDto)
         {
 
