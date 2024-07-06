@@ -22,7 +22,7 @@ namespace ApiProject.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("details")]
         [SwaggerOperation(Summary = "Get user with orders", Description = "Retrieves the user along with their associated orders based on the provided user ID.", Tags = new[] { ApiTags.UserData })]
         public async Task<ActionResult<UserOrdersGetResponse>> GetUserWithOrders(int userId)
         {
@@ -63,7 +63,33 @@ namespace ApiProject.Controllers
 
             return userOrdersDto;
         }
+
+        // Добавляем новый метод контроллера для получения заказов по ID пользователя
+        [HttpGet]
+        [SwaggerOperation(Summary = "Get orders by User ID", Description = "Returns a list of orders for the given User ID.", Tags = new[] { ApiTags.UserData })]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersByUserId(int userId)
+        {
+            var orders = await _context.Orders
+                .Where(o => o.UserId == userId)
+                .Select(order => new OrderDto
+                {
+                    Id = order.Id,
+                    ProductName = order.ProductName,
+                    Price = order.Price,
+                    OrderDate = order.OrderDate,
+                    UserId = order.UserId
+                })
+                .ToListAsync();
+
+            if (orders == null || !orders.Any())
+            {
+                return NotFound();
+            }
+
+            return Ok(orders);
+        }
     }
+
     public class UserDto
     {
         public int Id { get; set; }
@@ -75,6 +101,7 @@ namespace ApiProject.Controllers
         public string Address { get; set; }
         public bool IsActive { get; set; }
     }
+
     public class OrderDto
     {
         public int Id { get; set; }
@@ -83,10 +110,10 @@ namespace ApiProject.Controllers
         public DateTime OrderDate { get; set; }
         public int UserId { get; set; }
     }
+
     public class UserOrdersGetResponse
     {
         public UserDto User { get; set; }
         public List<OrderDto> Orders { get; set; }
     }
-
 }

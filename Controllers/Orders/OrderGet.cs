@@ -65,30 +65,6 @@ namespace ApiProject.Controllers.Orders
             return Ok(order);
         }
 
-        // GET: api/orders/user/{userId}
-        [HttpGet("user/{userId}")]
-        [SwaggerOperation(Summary = "Get orders by User ID", Description = "Returns a list of orders for the given User ID.", Tags = new[] { ApiTags.Users })]
-        public async Task<ActionResult<IEnumerable<OrderGetResponse>>> GetOrdersByUserId(int userId)
-        {
-            var orders = await _context.Orders
-                .Where(o => o.UserId == userId)
-                .Select(order => new OrderGetResponse
-                {
-                    Id = order.Id,
-                    ProductName = order.ProductName,
-                    Price = order.Price,
-                    OrderDate = order.OrderDate,
-                    UserId = order.UserId
-                })
-                .ToListAsync();
-
-            if (orders == null || !orders.Any())
-            {
-                return NotFound();
-            }
-
-            return Ok(orders);
-        }
     }
     
     //Dto classes
